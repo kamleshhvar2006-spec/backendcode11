@@ -1,0 +1,15 @@
+{% extends "app/base.html" %}
+{% block title %}Edit task{% endblock %}
+{% block content %}
+<h1>Edit task</h1>
+<form method="post" class="card add-form">
+  {% csrf_token %}
+  {{ form.title }}
+  {{ form.description }}
+  {% if form.title.errors %}<p class="error">{{ form.title.errors.0 }}</p>{% endif %}
+  <div class="row">
+    <button type="submit" class="btn primary">Save changes</button>
+    <a href="{% url 'item_list' %}" class="btn">Cancel</a>
+  </div>
+</form>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "app/base.html" %}
+{% block content %}
+<section class="intro">
+  <h1>Your tasks</h1>
+  <p class="muted"><span id="open-count">{{ open_count }}</span> open of {{ total_count }}</p>
+</section>
+
+<form method="post" class="card add-form">
+  {% csrf_token %}
+  {{ form.title }}
+  {{ form.description }}
+  {% if form.title.errors %}<p class="error">{{ form.title.errors.0 }}</p>{% endif %}
+  <button type="submit" class="btn primary">Add task</button>
+</form>
+
+<nav class="filters" aria-label="Filter tasks">
+  <a href="?show=all" {% if show == "all" %}aria-current="page"{% endif %}>All</a>
+  <a href="?show=open" {% if show == "open" %}aria-current="page"{% endif %}>Open</a>
+  <a href="?show=done" {% if show == "done" %}aria-current="page"{% endif %}>Done</a>
+</nav>
+
+{% if items %}
+<ul class="items">
+  {% for item in items %}
+  <li class="item{% if item.done %} is-done{% endif %}">
+    <input type="checkbox" class="toggle" id="item-{{ item.pk }}"
+           data-url="{% url 'item_toggle' item.pk %}" {% if item.done %}checked{% endif %}
+           aria-label="Mark “{{ item.title }}” as done">
+    <label for="item-{{ item.pk }}" class="item-body">
+      <span class="item-title">{{ item.title }}</span>
+      {% if item.description %}<span class="item-desc">{{ item.description }}</span>{% endif %}
+    </label>
+    <div class="item-actions">
+      <a href="{% url 'item_edit' item.pk %}">Edit</a>
+      <a href="{% url 'item_delete' item.pk %}" class="danger">Delete</a>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p class="empty">No tasks here. Add one above to get started.</p>
+{% endif %}
+{% endblock %}

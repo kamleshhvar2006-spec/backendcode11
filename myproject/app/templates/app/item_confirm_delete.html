@@ -1,0 +1,11 @@
+{% extends "app/base.html" %}
+{% block title %}Delete task{% endblock %}
+{% block content %}
+<h1>Delete this task?</h1>
+<p class="muted">“{{ item.title }}” will be removed permanently.</p>
+<form method="post" class="row">
+  {% csrf_token %}
+  <button type="submit" class="btn danger-solid">Delete task</button>
+  <a href="{% url 'item_list' %}" class="btn">Keep task</a>
+</form>
+{% endblock %}
